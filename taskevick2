@@ -1,0 +1,27 @@
+void main() {
+  double res = processOrder(
+    orderId : 1,
+    itemPrice : 999.99,
+    promoCode : "Artur777",
+    deliveryFee : 500.0,);
+  print("total $res");
+}
+   processOrder({
+     required int orderId,
+     required double itemPrice,
+     String? promoCode,
+     double? deliveryFee,
+  }){
+     double price = itemPrice;
+     if (promoCode=="SAVE10"){
+       price=price*0.9;
+     }
+     double f = deliveryFee?? 500.0;
+     double sf = price + f;
+     print("order id:$orderId");
+	print("item price:$itemPrice");
+		print("promo code:${promoCode??"none"}");
+			print("delivery Fee:$f");
+				print("final total:$sf");
+     return sf;
+   }
