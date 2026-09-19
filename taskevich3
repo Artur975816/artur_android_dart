@@ -1,0 +1,150 @@
+import 'dart:io';
+
+// 1. CHECK BALANCE
+// Arrow function =>
+void checkBalance({
+  required String name,
+  required double balance,
+}) =>
+    print("$name, your current balance: \$${balance.toStringAsFixed(2)}");
+
+
+// 2. DEPOSIT
+double deposit({
+  required double currentBalance,
+  double? amount,
+}) {
+  double depositAmount = amount ?? 0.0;
+
+  if (depositAmount <= 0) {
+    print("Error: Invalid deposit amount.");
+    return currentBalance;
+  }
+
+  double updatedBalance = currentBalance + depositAmount;
+
+  print("Deposit successful!");
+  print("Deposited: \$${depositAmount.toStringAsFixed(2)}");
+  print("New balance: \$${updatedBalance.toStringAsFixed(2)}");
+
+  return updatedBalance;
+}
+
+
+// 3. WITHDRAW
+double withdraw({
+  required String name,
+  required double currentBalance,
+  double? amount,
+  int? pinCode,
+}) {
+  // If pinCode is null -> 0000
+  int enteredPin = pinCode ?? 0000;
+
+  // Check PIN
+  if (enteredPin != 1234) {
+    print("Error: Incorrect PIN code.");
+    return currentBalance;
+  }
+
+  // If amount is null -> 0.0
+  double withdrawAmount = amount ?? 0.0;
+
+  if (withdrawAmount <= 0) {
+    print("Error: Invalid withdrawal amount.");
+    return currentBalance;
+  }
+
+  // Check balance
+  if (withdrawAmount > currentBalance) {
+    print("Error: No money, no funny.");
+    return currentBalance;
+  }
+
+  double updatedBalance = currentBalance - withdrawAmount;
+
+  print("Withdrawal successful!");
+  print("Withdrawn: \$${withdrawAmount.toStringAsFixed(2)}");
+  print("Remaining balance: \$${updatedBalance.toStringAsFixed(2)}");
+
+  return updatedBalance;
+}
+
+
+// MAIN
+void main() {
+  String name = "Artur";
+  double balance = 7777.7;
+
+  while (true) {
+    print("\n========================================");
+    print("       ATM - Artur go Top and Mid");
+    print("========================================");
+    print("1. Check balance");
+    print("2. Deposit");
+    print("3. Withdraw");
+    print("0. Exit");
+    print("==========================================");
+
+    stdout.write("Choose: ");
+    String? choice = stdin.readLineSync();
+
+    // CHECK BALANCE
+    if (choice == "1") {
+      checkBalance(
+        name: name,
+        balance: balance,
+      );
+      print("=======================================");
+    }
+
+    // DEPOSIT
+    else if (choice == "2") {
+      stdout.write("Enter deposit amount: ");
+      String? input = stdin.readLineSync();
+
+      double? amount = double.tryParse(input ?? "");
+
+      balance = deposit(
+        currentBalance: balance,
+        amount: amount,
+      );
+      print("=========================================");
+    }
+
+    // WITHDRAW
+    else if (choice == "3") {
+      stdout.write("Enter withdrawal amount: ");
+      String? inputAmount = stdin.readLineSync();
+
+      double? amount = double.tryParse(inputAmount ?? "");
+
+      stdout.write("Enter PIN: ");
+      String? inputPin = stdin.readLineSync();
+
+      int? pinCode = int.tryParse(inputPin ?? "");
+
+      balance = withdraw(
+        name: name,
+        currentBalance: balance,
+        amount: amount,
+        pinCode: pinCode,
+      );
+      print("============================================");
+    }
+
+    // EXIT
+    else if (choice == "0") {
+      print("Thank you for using ATM!");
+      print("===========================================");
+      break;
+    }
+
+    // WRONG COMMAND
+    else {
+      print("Error: Invalid choice.");
+      print("========================================");
+    }
+  }
+}
+
