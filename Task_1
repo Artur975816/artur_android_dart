@@ -1,0 +1,191 @@
+void main() {
+  String name = "Артур";
+  int age = 67;
+  double gpa = 3.33;
+  bool isStudent = true;
+
+  print(
+    "name: $name\n"
+    "age: $age y.o.\n"
+    "gpa: $gpa\n"
+    "is Lion, Tiger, mushinskiy: ${isStudent}",
+  );
+
+  String text1 = "Hello";
+  String? text2 = null;
+
+  print("text1: $text1");
+  print("text2: $text2");
+
+  int length1 = text1.length;
+  int length2 = text2 != null ? text2.length : 0;
+
+  print(length1);
+  print(length2);
+
+  String confirmedText = text2 != null ? text2 : "default";
+
+  print(
+    "confirmed $confirmedText "
+    "length: ${confirmedText.length}",
+  );
+
+  // ============================================================
+  // TASK 1
+  // OUTPUT MULTIPLICATION TABLE 1-10
+  print("TASK 1");
+  // ============================================================
+
+  for (int j = 1; j <= 10; j++) {
+    int digit = j;
+
+    print("MULTIPLICATION TABLE for digit $digit");
+
+    for (int i = 1; i <= 10; i++) {
+      print("$digit * $i = ${i * digit}");
+    }
+  }
+
+  // ============================================================
+  // TASK 2
+  // NEXT DAY
+  print("TASK 2");
+  // ============================================================
+
+  int day = 28;
+  int month = 2;
+  int year = 2024;
+
+  bool isLeapYear =
+      (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+
+  int daysInMonth;
+
+  if (month == 2) {
+    daysInMonth = isLeapYear ? 29 : 28;
+  } else if (month == 4 ||
+      month == 6 ||
+      month == 9 ||
+      month == 11) {
+    daysInMonth = 30;
+  } else {
+    daysInMonth = 31;
+  }
+
+  if (day < 1 || day > daysInMonth) {
+    print("invalid date");
+  } else {
+    day++;
+
+    if (day > daysInMonth) {
+      day = 1;
+      month++;
+
+      if (month > 12) {
+        month = 1;
+        year++;
+      }
+    }
+
+    String formattedDay = day.toString().padLeft(2, '0');
+    String formattedMonth = month.toString().padLeft(2, '0');
+
+    print("$formattedDay.$formattedMonth.$year");
+  }
+
+  // ============================================================
+  // TASK 3
+  // VOWEL COUNTER IN A STRING
+  print("TASK 3");
+  // ============================================================
+
+  String text = "flutter mobile development";
+  String vowels = "aeiouy";
+
+  int count = 0;
+
+  for (int i = 0; i < text.length; i++) {
+    if (vowels.contains(text[i])) {
+      count++;
+    }
+  }
+
+  print("$text -> $count");
+
+  // ============================================================
+  // TASK 4
+  // MIN & MAX USING SORT
+  print("TASK 4");
+  // ============================================================
+
+  List<int> numbers = [14, 88, 3, 42, 99, 12, 67];
+
+  numbers.sort();
+
+  print(
+    "MIN: ${numbers.first}, "
+    "MAX: ${numbers.last}",
+  );
+
+  // -> MAX: 99, MIN: 3
+
+  List<int> numbers1 = [234, 34, 123, 44, 949, 112, 67];
+
+  numbers1.sort();
+
+  print(
+    "MIN: ${numbers1.first}, "
+    "MAX: ${numbers1.last}",
+  );
+
+  // -> MAX: 949, MIN: 34
+
+  // ============================================================
+  // TASK 4
+  // RE-Zerv
+  // ============================================================
+
+  List<int> numbers2 = [14, 88, 3, 42, 99, 12, 67];
+
+  int min = numbers2[0];
+  int max = numbers2[0];
+
+  for (int number in numbers2) {
+    if (number < min) {
+      min = number;
+    }
+
+    if (number > max) {
+      max = number;
+    }
+  }
+
+  print("MIN: $min, MAX: $max");
+
+  // ============================================================
+  // TASK 5
+  // PRIME NUMBERS FROM 1 TO 300
+  print("TASK 5");
+  // ============================================================
+
+  for (int j = 1; j <= 300; j++) {
+    int number = j;
+    bool isPrime = true;
+
+    if (number < 2) {
+      isPrime = false;
+    }
+
+    for (int i = 2; i * i <= number; i++) {
+      if (number % i == 0) {
+        isPrime = false;
+        break;
+      }
+    }
+
+    print(
+      "$number -> "
+      "${isPrime ? "prime number" : "not prime number"}",
+    );
+  }
+}
