@@ -1,0 +1,235 @@
+class Book {
+  String title;
+  String author;
+  double price;
+  bool isBorrowed;
+
+  Book({
+    required this.title,
+    required this.author,
+    required this.price,
+    this.isBorrowed = false,
+  });
+}
+
+class Library {
+  List<Book> _books = [];
+
+  void addBook(Book book) {
+    _books.add(book);
+  }
+
+  List<Book> getAvailableBooks() {
+    return _books.where((book) => book.isBorrowed == false).toList();
+  }
+
+  double getTotalValue() {
+    return _books.fold(0.0, (total, book) => total + book.price);
+  }
+}
+
+void main() {
+  Library library = Library();
+
+  library.addBook(
+    Book(
+      title: 'The Great Gatsby',
+      author: 'F. Scott Fitzgerald',
+      price: 15.99,
+    ),
+  );
+
+  library.addBook(
+    Book(
+      title: '1984',
+      author: 'George Orwell',
+      price: 12.50,
+      isBorrowed: true,
+    ),
+  );
+
+  library.addBook(
+    Book(
+      title: 'To Kill a Mockingbird',
+      author: 'Harper Lee',
+      price: 18.75,
+    ),
+  );
+
+  library.addBook(
+    Book(
+      title: 'Harry Potter',
+      author: 'J.K. Rowling',
+      price: 25.00,
+    ),
+  );
+
+  print('Available Books:');
+
+  for (var book in library.getAvailableBooks()) {
+    print('${book.title} by ${book.author} - \$${book.price}');
+  }
+
+  print('\nTotal Collection Value: \$${library.getTotalValue()}');
+}
+
+//---------------------------------------------------
+abstract class MediaItem {
+  String id;
+  String title;
+  double price;
+
+  MediaItem({
+    required this.id,
+    required this.title,
+    required this.price,
+  });
+
+  String getDetails();
+}
+
+mixin Downloadable {
+  void download(String title) {
+    print('Downloading "$title"...');
+  }
+}
+
+class Audiobook extends MediaItem with Downloadable {
+  double durationHours;
+  String narrator;
+
+  Audiobook({
+    required String id,
+    required String title,
+    required double price,
+    required this.durationHours,
+    required this.narrator,
+  }) : super(
+          id: id,
+          title: title,
+          price: price,
+        );
+
+  @override
+  String getDetails() {
+    return 'Audiobook: $title | Narrator: $narrator | '
+        'Duration: ${durationHours} hours | Price: \$${price.toStringAsFixed(2)}';
+  }
+}
+
+class EBook extends MediaItem with Downloadable {
+  double fileSizeMB;
+  String author;
+
+  EBook({
+    required String id,
+    required String title,
+    required double price,
+    required this.fileSizeMB,
+    required this.author,
+  }) : super(
+          id: id,
+          title: title,
+          price: price,
+        );
+
+  @override
+  String getDetails() {
+    return 'EBook: $title | Author: $author | '
+        'File Size: ${fileSizeMB} MB | Price: \$${price.toStringAsFixed(2)}';
+  }
+}
+
+class ShoppingCart {
+  List<MediaItem> _items = [];
+
+  void addItem(MediaItem item) {
+    _items.add(item);
+  }
+
+  double calculateTotalWithTax({double taxRate = 0.12}) {
+    double subtotal = _items.fold(
+      0.0,
+      (total, item) => total + item.price,
+    );
+
+    return subtotal + (subtotal * taxRate);
+  }
+
+  List<MediaItem> filterByMaxPrice(double maxPrice) {
+    return _items
+        .where((item) => item.price <= maxPrice)
+        .toList();
+  }
+
+  void printReceipt() {
+    print('===== SHOPPING CART RECEIPT =====');
+
+    for (var item in _items) {
+      print(item.getDetails());
+
+      if (item is Downloadable) {
+        item.download(item.title);
+      }
+
+      print('---------------------------------');
+    }
+
+    double subtotal = _items.fold(
+      0.0,
+      (total, item) => total + item.price,
+    );
+
+    double tax = subtotal * 0.12;
+    double total = calculateTotalWithTax();
+
+    print('Subtotal: \$${subtotal.toStringAsFixed(2)}');
+    print('Tax (12%): \$${tax.toStringAsFixed(2)}');
+    print('Total: \$${total.toStringAsFixed(2)}');
+  }
+}
+
+void main() {
+  ShoppingCart cart = ShoppingCart();
+
+  cart.addItem(
+    Audiobook(
+      id: 'A001',
+      title: 'The Hobbit',
+      price: 20.00,
+      durationHours: 11.5,
+      narrator: 'Andy Serkis',
+    ),
+  );
+
+  cart.addItem(
+    EBook(
+      id: 'E001',
+      title: 'Clean Code',
+      price: 30.00,
+      fileSizeMB: 5.2,
+      author: 'Robert C. Martin',
+    ),
+  );
+
+  cart.addItem(
+    EBook(
+      id: 'E002',
+      title: 'Dart Programming',
+      price: 15.00,
+      fileSizeMB: 3.8,
+      author: 'John Smith',
+    ),
+  );
+
+  cart.printReceipt();
+
+  print('\n===== ITEMS UNDER \$20 =====');
+
+  List<MediaItem> affordableItems =
+      cart.filterByMaxPrice(20.00);
+
+  for (var item in affordableItems) {
+    print(item.getDetails());
+  }
+}
